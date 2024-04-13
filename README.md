@@ -16,16 +16,56 @@ stored.
 4. Read the IP address which is send by the client.
 5. Map the IP address with its MAC address and return the MAC address to client.
 ## PROGRAM - ARP
-![Screenshot 2024-03-13 113403](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/54b9641e-0628-4b71-847e-23ef2b38ed62)
-
+```
+import socket
+s=socket.socket()
+s.bind(('localhost',8000))
+s.listen(5)
+c,addr=s.accept()
+address={"165.165.80.80":"6A:08:AA:C2","165.165.79.1":"8A:BC:E3:FA"};
+while True:
+    ip=c.recv(1024).decode()
+    try:
+        c.send(address[ip].encode())
+    except KeyError:
+        c.send("Not Found".encode())  
+Server Program:
+import socket
+s=socket.socket()
+s.connect(('localhost',8000))
+while True:
+    ip=input("Enter logical address: ")
+    s.send(ip.encode())
+    print("MAC Address",s.recv(1024).decode())
+```
 ## OUPUT - ARP
-![Screenshot 2024-03-13 113431](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/7d86373c-2083-426b-9e22-274ef0c8d072)
+![image](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/0510fd18-db35-466b-abe9-17f759587f18)
 
 ## PROGRAM - RARP
-![Screenshot 2024-03-13 113410](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/aeba1a0c-fe6f-43bc-8589-af3c06bb1e18)
-
+```
+import socket
+s=socket.socket()
+s.bind(('localhost',9000))
+s.listen(5)
+c,addr=s.accept()
+address={"6A:08:AA:C2":"192.168.1.100","8A:BC:E3:FA":"192.168.1.99"}
+while True:
+    ip=c.recv(1024).decode()
+    try:
+        c.send(address[ip].encode())
+    except KeyError:
+        c.send("Not found".encode()) 
+Server Program:
+import socket
+s=socket.socket()
+s.connect(('localhost',9000))
+while True:
+    ip=input("Enter mac address: ")
+    s.send(ip.encode())
+    print("Logical address",s.recv(1024).decode())
+```
 ## OUPUT -RARP
-![Screenshot 2024-03-13 113440](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/0551343f-309a-4db6-824d-27fee3dde630)
+![image](https://github.com/Narasimhan05/2c.ARP_RARP_PROTOCOLS/assets/132819871/148fb4d2-3d2a-45c8-a681-0443f272ed3b)
 
 ## RESULT
 Thus, the python program for simulating ARP protocols using TCP was successfully 
